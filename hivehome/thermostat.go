@@ -1,14 +1,22 @@
 package hivehome
 
-import "github.com/tidwall/gjson"
+import (
+	"fmt"
 
-func (c *client) GetThermostatIDForZone(zoneName string) string {
+	"github.com/tidwall/gjson"
+)
 
-	allNodes := c.GetAllNodes()
+func (c *client) GetThermostatIDForZone(zoneName string) (string, error) {
+
+	allNodes, err := c.GetAllNodes()
+
+	if err != nil {
+		return "", fmt.Errorf("Error getting Thermostat ID: %+v", err)
+	}
 
 	thermostatParentID := gjson.Get(allNodes, "nodes.#[attributes.zoneName.reportedValue=="+zoneName+"].id")
 
 	thermostatID := gjson.Get(allNodes, "nodes.#[parentNodeId=="+thermostatParentID.String()+"].id")
 
-	return thermostatID.String()
+	return thermostatID.String(), nil
 }
