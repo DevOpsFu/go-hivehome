@@ -16,7 +16,7 @@ type sessionInfo struct {
 	Sessions []credentials `json:"sessions"`
 }
 
-type client struct {
+type Client struct {
 	BaseURL       *url.URL
 	sessionID     string
 	httpClient    *http.Client
@@ -34,7 +34,7 @@ var commonHeaders = map[string][]string{
 	"X-Omnia-Client": []string{"Hive Web Dashboard"},
 }
 
-func NewClient(username string, password string) *client {
+func NewClient(username string, password string) *Client {
 
 	clientBaseURL, _ := url.Parse(baseURL)
 
@@ -42,7 +42,7 @@ func NewClient(username string, password string) *client {
 
 	sessInfo := sessionInfo{Sessions: []credentials{creds}}
 
-	return &client{
+	return &Client{
 		BaseURL:       clientBaseURL,
 		httpClient:    &http.DefaultClient,
 		sessionInfo:   sessInfo,
